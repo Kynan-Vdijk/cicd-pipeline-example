@@ -30,6 +30,30 @@ jobs:
           pytest -v unit-testing
           STATUS=$?
           set -e
+
+      - name: Start server
+        run: |
+          nohup python -u src/api/server.py >/dev/null 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS "http://localhost:8888/sum?a=1&b=1" > /dev/null; then
+              echo "Server is up"
+              exit 0
+            fi
+            echo "waiting for server..."; sleep 1
+          done
+          echo "pipeline failed: server did not start" > result.txt
+          exit 1
+
+      - name: Run system tests
+        run: |
+          set +e
+          pytest -v system-testing
+          STATUS=$?
+          set -e
+          if [ $STATUS -ne 0 ]; then
+            echo "pipeline failed: some system tests did not pass" > result.txt
+            exit 1
+          fi
           if [ $STATUS -ne 0 ]; then
             echo "pipeline failed: some unit tests did not pass" > result.txt
             exit 1
