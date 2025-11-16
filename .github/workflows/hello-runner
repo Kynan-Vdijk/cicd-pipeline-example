@@ -1,4 +1,4 @@
-name: hello world 2
+name: hello runner
 
 on:
   push:
@@ -6,10 +6,10 @@ on:
       - main
 
 jobs:
-  hello-world:
+  hello-runner:
     runs-on: ubuntu-latest
     steps:
-      - name: Show runner info
+      - name: show runner info
         run: |
           echo "=== CPU Info ==="
           lscpu
