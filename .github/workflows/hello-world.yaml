@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo text to terminal
-        run: ping 145.24.222.241
+        run: curl -I http://145.24.222.241
